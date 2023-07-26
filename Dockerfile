@@ -1,35 +1,23 @@
-# Use an official Maven runtime parent image
-FROM maven:3.6.3-openjdk-8-slim AS build
+# Use oficial maven image with openjdk-8
+FROM maven:3.6.3-openjdk-8
 
-# Set the working directory in the image
-WORKDIR /usr/src/app
+# Copiar el directorio actual en /app
+COPY . /app
 
-# Copy the POM file
-COPY ./pom.xml ./
+# Set the working directory
+WORKDIR /app
 
-# Download all required dependencies into one layer
-RUN mvn dependency:go-offline -B
-
-# Copy other source code files
-COPY ./src ./src
-
-# Build a JAR file
+# Construir el proyecto usando maven
 RUN mvn clean install
 
-# Start with a base image containing Java runtime
-FROM openjdk:8-jdk-alpine
+# Cambia a una imagen de JRE para reducir el tamaño de la imagen final
+FROM openjdk:8-jre-slim
 
-# Add a volume pointing to /tmp
-VOLUME /tmp
+# Copia el jar generado por maven a la imagen de docker
+COPY --from=0 /app/target/veterinaria-patitas-0.0.1-SNAPSHOT.jar /veterinaria-patitas.jar
 
-# Make port 8085 available to the world outside this container
-EXPOSE 10000
+# Puerto a exponer
+EXPOSE 8080
 
-# The application's JAR file
-ARG JAR_FILE=/usr/src/app/target/*.jar
-
-# Copy the application's JAR to the container
-COPY --from=build ${JAR_FILE} app.jar
-
-# Run the JAR file
-ENTRYPOINT ["java", "-Dfile.encoding=windows-1252","-jar","/app.jar"]
+# Comando para ejecutar la aplicación
+CMD ["java", "-jar", "/veterinaria-patitas.jar"]
