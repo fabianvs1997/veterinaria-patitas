@@ -23,7 +23,7 @@ FROM openjdk:8-jdk-alpine
 VOLUME /tmp
 
 # Make port 8085 available to the world outside this container
-EXPOSE 8080
+EXPOSE 10000
 
 # The application's JAR file
 ARG JAR_FILE=/usr/src/app/target/*.jar
