@@ -32,4 +32,4 @@ ARG JAR_FILE=/usr/src/app/target/*.jar
 COPY --from=build ${JAR_FILE} app.jar
 
 # Run the JAR file
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dfile.encoding=windows-1252","-jar","/app.jar"]
