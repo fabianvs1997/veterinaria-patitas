@@ -17,7 +17,7 @@ FROM openjdk:8-jre-slim
 COPY --from=0 /app/target/veterinaria-patitas-0.0.1-SNAPSHOT.jar /veterinaria-patitas.jar
 
 # Puerto a exponer
-EXPOSE 8080
+EXPOSE 10000
 
 # Comando para ejecutar la aplicación
 CMD ["java", "-jar", "/veterinaria-patitas.jar"]
